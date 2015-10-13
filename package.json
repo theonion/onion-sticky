@@ -6,11 +6,13 @@
   "dependencies": {},
   "devDependencies": {
     "babelify": "^6.3.0",
-    "browserify": "^11.2.0"
+    "browserify": "^11.2.0",
+    "watch": "^0.16.0"
   },
   "scripts": {
     "build": "make",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "make watch"
   },
   "repository": {
     "type": "git",

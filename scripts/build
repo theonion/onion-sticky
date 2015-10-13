@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+
 let fs         = require('fs');
 let browserify = require('browserify');
 let babelify   = require('babelify');
@@ -9,7 +10,7 @@ let target = `dist/onion-sticky.browserify-shim${ debug ? '.debug' : '' }.js`;
 
 browserify({ debug })
   .transform(babelify)
-  .require(require.resolve('../onion-sticky.js'), { entry: true })
+  .require(require.resolve('../src/onion-sticky.js'), { entry: true })
   .on("error", function (err) { console.log("Error : " + err.message); })
   .bundle()
   .pipe(fs.createWriteStream(target))
