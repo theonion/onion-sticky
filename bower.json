@@ -1,0 +1,18 @@
+{
+  "name": "onion-sticky",
+  "version": "0.0.1",
+  "homepage": "https://github.com/theonion/onion-sticky",
+  "authors": [
+    "Onion Product Team <webtech@theonion.com>"
+  ],
+  "description": "A sticky sidebar implementation for onion properties.",
+  "main": "onion-sticky.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
