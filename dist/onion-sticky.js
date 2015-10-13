@@ -5,7 +5,7 @@ const SCROLLING_UP = 'scrolling-up';
 const SCROLLING_DOWN = 'scrolling-down';
 const SCROLLING_UNCH = 'not-scrolling'
 
-module.exports = class OnionSticky {
+export class OnionSticky {
   constructor (options) {
     _.extend(this, options);
     this.animationLoop = this.animationLoop.bind(this);

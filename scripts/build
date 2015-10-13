@@ -8,7 +8,7 @@ let babelify   = require('babelify');
 let debug = process.argv[2] === "--debug";
 let target = `dist/onion-sticky.browserify-shim${ debug ? '.debug' : '' }.js`;
 
-browserify({ debug })
+browserify({ debug, standalone: 'OnionSticky' })
   .transform(babelify)
   .require(require.resolve('../src/onion-sticky.js'), { entry: true })
   .on("error", function (err) { console.log("Error : " + err.message); })
