@@ -21,7 +21,7 @@ Install into your app.
 `bower install onion-sticky`
 
 ## Implementing
-```
+```javascript
 var OnionSticky = require('onion-sticky/dist/onion-sticky.browserify-shim.js').OnionSticky;
 
 this.onionSticky = new OnionSticky({
