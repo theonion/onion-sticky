@@ -14,7 +14,7 @@ Use the [Makefile](Makefile) while developing:
 * watch: watches source and runs `make all` on changes
 * debug: builds the debug version
 * shim: builds a browserify shimmed version
-* 
+
 ## Installing
 
 Install into your app.
