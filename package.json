@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "A sticky sidebar implementation for onion properties.",
   "main": "onion-sticky.js",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "~3.8.0",
+  },
   "devDependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
