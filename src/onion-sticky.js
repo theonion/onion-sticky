@@ -141,6 +141,11 @@ export class OnionSticky {
         styles.position = 'absolute';
         styles.top = Math.abs(this.frame.containerRect.top) - Math.abs(this.frame.elementRect.top);
         styles.bottom = '';
+      } else if (this.elementBottomAboveBottomPoint()) {
+        this.debug('elementBottomAboveBottomPoint');
+        styles.position = 'fixed';
+        styles.top = '';
+        styles.bottom = this.frame.bottomPoint;
       }
     }
 
