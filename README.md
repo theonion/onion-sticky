@@ -12,7 +12,7 @@ Use the [Makefile](Makefile) while developing:
 
 * `all`: builds production and debug versions
 * `watch`: watches source and runs `make all` on changes
-* `debug`: builds the debug version
+* `debug`: builds the debug version (with embedded sourceMap)
 * `shim`: builds a browserify shimmed version
 
 ## Installing
