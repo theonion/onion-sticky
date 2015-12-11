@@ -20,8 +20,8 @@ export class OnionSticky {
   getFrameData () {
     this.lastFrame = this.frame;
 
-    var elementRect = this.element[0].getBoundingClientRect();
-    var containerRect = this.container[0].getBoundingClientRect();
+    let elementRect = this.element[0].getBoundingClientRect();
+    let containerRect = this.container[0].getBoundingClientRect();
 
     this.frame = {
       elementRect     : _.pick(elementRect, ['top', 'right', 'bottom', 'left', 'width', 'height']),
@@ -43,7 +43,7 @@ export class OnionSticky {
   }
 
   elementOutOfViewport () {
-    var elementRect = this.frame.elementRect;
+    let elementRect = this.frame.elementRect;
     return elementRect.top > window.innerHeight || elementRect.bottom < 0;
   }
 
@@ -72,12 +72,12 @@ export class OnionSticky {
   }
 
   calculateScrollDirection () {
-    if (!this._lastScrollTop) {
+    if (this._lastScrollTop === undefined) {
       this._lastScrollTop = this.scrollContainer.scrollTop();
     }
 
-    var scrollDirection = SCROLLING_UNCH;
-    var scrollContainerScrollTop = this.scrollContainer.scrollTop();
+    let scrollDirection = SCROLLING_UNCH;
+    let scrollContainerScrollTop = this.scrollContainer.scrollTop();
 
     if (this._lastScrollTop < scrollContainerScrollTop) {
       scrollDirection = SCROLLING_DOWN;
@@ -100,7 +100,7 @@ export class OnionSticky {
       return;
     }
 
-    var styles = {}
+    let styles = {};
 
     if (this.containerTopBelowZeroPoint()) {
       this.debug('containerTopBelowZeroPoint');
@@ -141,9 +141,15 @@ export class OnionSticky {
         styles.position = 'absolute';
         styles.top = Math.abs(this.frame.containerRect.top) - Math.abs(this.frame.elementRect.top);
         styles.bottom = '';
+      } else if (this.elementBottomAboveBottomPoint()) {
+        this.debug('elementBottomAboveBottomPoint');
+        styles.position = 'fixed';
+        styles.top = '';
+        styles.bottom = this.frame.bottomPoint;
       }
     }
 
+    this.debug('renderFrame() styles', styles);
     this.element.css(styles);
   }
 
