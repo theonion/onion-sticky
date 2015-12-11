@@ -72,7 +72,7 @@ export class OnionSticky {
   }
 
   calculateScrollDirection () {
-    if (this._lastScrollTop === undefined) {
+    if (typeof(this._lastScrollTop) === 'undefined') {
       this._lastScrollTop = this.scrollContainer.scrollTop();
     }
 
