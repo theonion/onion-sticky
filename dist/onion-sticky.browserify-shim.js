@@ -95,7 +95,7 @@ var OnionSticky = (function () {
   }, {
     key: 'calculateScrollDirection',
     value: function calculateScrollDirection() {
-      if (!this._lastScrollTop) {
+      if (this._lastScrollTop === undefined) {
         this._lastScrollTop = this.scrollContainer.scrollTop();
       }
 
@@ -158,9 +158,15 @@ var OnionSticky = (function () {
           styles.position = 'absolute';
           styles.top = Math.abs(this.frame.containerRect.top) - Math.abs(this.frame.elementRect.top);
           styles.bottom = '';
+        } else if (this.elementBottomAboveBottomPoint()) {
+          this.debug('elementBottomAboveBottomPoint');
+          styles.position = 'fixed';
+          styles.top = '';
+          styles.bottom = this.frame.bottomPoint;
         }
       }
 
+      this.debug('renderFrame() styles', styles);
       this.element.css(styles);
     }
   }, {
