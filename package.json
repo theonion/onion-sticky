@@ -16,7 +16,8 @@
     "karma-mocha": "^0.2.1",
     "mocha": "^2.3.4",
     "phantomjs": "^1.9.19",
-    "watch": "^0.16.0"
+    "watch": "^0.16.0",
+    "onionsay": "https://github.com/theonion/onionsay.git"
   },
   "scripts": {
     "build": "make",
