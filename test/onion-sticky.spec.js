@@ -1,5 +1,8 @@
 var assert = chai.assert;
 
+function returnTrue () { return true; }
+function returnFalse () { return false; }
+
 function debugRect(element, label) {
   if (element.length) {
     element = element[0];
@@ -234,8 +237,28 @@ describe('Onion Sticky', function () {
     });
   });
 
+  describe('lessThanBreakpoint', function () {
+    it('true when screen width is less than breakpoint', function () {
+      this.sticky.breakpoint = window.innerWidth + 100;
+
+      console.log(this.sticky.lessThanBreakpoint);
+      assert.isTrue(this.sticky.lessThanBreakpoint());
+    });
+
+    it('false when screen width is greater than breakpoint', function () {
+      this.sticky.breakpoint = window.innerWidth - 100;
+
+      assert.isFalse(this.sticky.lessThanBreakpoint());
+    });
+
+    it('false when no breakpoint set', function () {
+      this.sticky.breakpoint = undefined;
+
+      assert.isFalse(this.sticky.lessThanBreakpoint());
+    });
+  });
+
   describe('renderFrame', function () {
-    function returnTrue () { return true; }
     beforeEach(function () {
       // Let's always render;
       this.sticky.shouldRenderAnimation = returnTrue;
@@ -358,6 +381,44 @@ describe('Onion Sticky', function () {
       });
 
       it('sets styles if elementBottomAboveBottomPoint', function () {
+        this.sticky.elementBottomAboveBottomPoint = returnTrue;
+        this.sticky.renderFrame();
+
+        assert.equal(this.element.css('position'), 'fixed');
+        assert.equal(this.element.css('top'), 'auto');
+        assert.equal(this.element.css('bottom'), '200px');
+      });
+    });
+  });
+
+  describe('breakpoint', function () {
+    context('when screen width less than breakpoint', function () {
+      it('does not apply sticky rules', function () {
+        this.sticky.lessThanBreakpoint = returnTrue;
+        this.sticky.elementBottomAboveBottomPoint = returnTrue;
+        this.sticky.renderFrame();
+
+        assert.equal(this.element.css('position'), 'static');
+        assert.equal(this.element.css('top'), 'auto');
+        assert.equal(this.element.css('bottom'), 'auto');
+      });
+    });
+
+    context('when screen width greater than breakpoint', function () {
+      it('does apply sticky rules', function () {
+        this.sticky.shouldRenderAnimation = returnTrue;
+
+        this.element.css({
+          position: 'relative',
+          top: '-10px',
+          bottom: '-10px'
+        });
+
+        this.scrollContainer.scrollTop(10);
+        this.sticky.calculateScrollDirection();
+        this.scrollContainer.scrollTop(0);
+
+        this.sticky.lessThanBreakpoint = returnFalse;
         this.sticky.elementBottomAboveBottomPoint = returnTrue;
         this.sticky.renderFrame();
 

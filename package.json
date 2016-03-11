@@ -12,6 +12,7 @@
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.2.2",
     "karma-fixture": "^0.2.5",
+    "karma-html-reporter": "^0.2.7",
     "karma-html2js-preprocessor": "^0.1.0",
     "karma-mocha": "^0.2.1",
     "mocha": "^2.3.4",

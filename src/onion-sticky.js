@@ -5,6 +5,23 @@ const SCROLLING_UP = 'scrolling-up';
 const SCROLLING_DOWN = 'scrolling-down';
 const SCROLLING_UNCHANGED = 'not-scrolling'
 
+const DIMENSIONS = [
+  'top',
+  'right',
+  'bottom',
+  'left',
+  'width',
+  'height',
+];
+
+function pickDimensions (rect) {
+  let dimensions = {};
+  DIMENSIONS.forEach(function (dimension) {
+    dimensions[dimension] = rect[dimension];
+  });
+  return dimensions;
+}
+
 export class OnionSticky {
   constructor (options) {
     _.extend(this, options);
@@ -24,15 +41,15 @@ export class OnionSticky {
     let containerRect = this.container[0].getBoundingClientRect();
 
     this.frame = {
-      elementRect     : _.pick(elementRect, ['top', 'right', 'bottom', 'left', 'width', 'height']),
-      containerRect   : _.pick(containerRect, ['top', 'right', 'bottom', 'left', 'width', 'height']),
-      innerHeight     : window.innerHeight,
-      innerWidth      : window.innerWidth,
-      containerTop    : containerRect.top,
-      containerBottom : containerRect.bottom,
-      zeroPoint       : this.getDistanceFromTop(),
-      bottomPoint     : this.getDistanceFromBottom(),
-      scrollDirection : this.calculateScrollDirection(),
+      elementRect        : pickDimensions(elementRect),
+      containerRect      : pickDimensions(containerRect),
+      innerHeight        : window.innerHeight,
+      innerWidth         : window.innerWidth,
+      containerTop       : containerRect.top,
+      containerBottom    : containerRect.bottom,
+      zeroPoint          : this.getDistanceFromTop(),
+      bottomPoint        : this.getDistanceFromBottom(),
+      scrollDirection    : this.calculateScrollDirection(),
     }
   }
 
@@ -93,6 +110,15 @@ export class OnionSticky {
     return scrollDirection;
   }
 
+  lessThanBreakpoint () {
+    if (this.breakpoint) {
+      return this.breakpoint >= window.innerWidth;
+    }
+    else {
+      return false;
+    }
+  }
+
   renderFrame () {
     this.getFrameData();
 
@@ -102,7 +128,13 @@ export class OnionSticky {
 
     let styles = {};
 
-    if (this.containerTopBelowZeroPoint()) {
+    if (this.lessThanBreakpoint()) {
+      this.debug('lessThanBreakpoint');
+      styles.position = '';
+      styles.top = '';
+      styles.bottom = '';
+    }
+    else if (this.containerTopBelowZeroPoint()) {
       this.debug('containerTopBelowZeroPoint');
       styles.position = '';
       styles.top = '';

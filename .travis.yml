@@ -1,0 +1,10 @@
+language: node_js
+sudo: false
+before_script:
+- "./node_modules/.bin/bower install"
+script:
+- "make"
+cache:
+  directories:
+  - node_modules
+  - app/bower_components
