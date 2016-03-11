@@ -3,7 +3,7 @@
 const BOTTOM_STICKY = 'bottom-sticky';
 const SCROLLING_UP = 'scrolling-up';
 const SCROLLING_DOWN = 'scrolling-down';
-const SCROLLING_UNCH = 'not-scrolling'
+const SCROLLING_UNCHANGED = 'not-scrolling'
 
 export class OnionSticky {
   constructor (options) {
@@ -76,7 +76,7 @@ export class OnionSticky {
       this._lastScrollTop = this.scrollContainer.scrollTop();
     }
 
-    let scrollDirection = SCROLLING_UNCH;
+    let scrollDirection = SCROLLING_UNCHANGED;
     let scrollContainerScrollTop = this.scrollContainer.scrollTop();
 
     if (this._lastScrollTop < scrollContainerScrollTop) {
@@ -86,7 +86,7 @@ export class OnionSticky {
       scrollDirection = SCROLLING_UP;
     }
     else {
-      scrollDirection = SCROLLING_UNCH;
+      scrollDirection = SCROLLING_UNCHANGED;
     }
 
     this._lastScrollTop = scrollContainerScrollTop;;

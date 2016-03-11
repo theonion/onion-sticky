@@ -205,11 +205,11 @@ describe('Onion Sticky', function () {
   });
 
   describe('calculateScrollDirection', function () {
-    it('SCROLLING_UNCH on first call', function () {
+    it('SCROLLING_UNCHANGED on first call', function () {
       assert.equal(this.sticky.calculateScrollDirection(), 'not-scrolling');
     });
 
-    it('SCROLLING_UNCH when scrolling unchanged', function () {
+    it('SCROLLING_UNCHANGED when scrolling unchanged', function () {
       this.scrollContainer.scrollTop(10);
       this.sticky.calculateScrollDirection();
       this.scrollContainer.scrollTop(10);

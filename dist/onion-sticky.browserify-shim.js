@@ -12,7 +12,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var BOTTOM_STICKY = 'bottom-sticky';
 var SCROLLING_UP = 'scrolling-up';
 var SCROLLING_DOWN = 'scrolling-down';
-var SCROLLING_UNCH = 'not-scrolling';
+var SCROLLING_UNCHANGED = 'not-scrolling';
 
 var OnionSticky = (function () {
   function OnionSticky(options) {
@@ -99,7 +99,7 @@ var OnionSticky = (function () {
         this._lastScrollTop = this.scrollContainer.scrollTop();
       }
 
-      var scrollDirection = SCROLLING_UNCH;
+      var scrollDirection = SCROLLING_UNCHANGED;
       var scrollContainerScrollTop = this.scrollContainer.scrollTop();
 
       if (this._lastScrollTop < scrollContainerScrollTop) {
@@ -107,7 +107,7 @@ var OnionSticky = (function () {
       } else if (this._lastScrollTop > scrollContainerScrollTop) {
         scrollDirection = SCROLLING_UP;
       } else {
-        scrollDirection = SCROLLING_UNCH;
+        scrollDirection = SCROLLING_UNCHANGED;
       }
 
       this._lastScrollTop = scrollContainerScrollTop;;
