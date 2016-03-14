@@ -1,6 +1,7 @@
 language: node_js
 sudo: false
 before_script:
+- "npm install -g npm@'>1.4.3'"
 - "./node_modules/.bin/bower install"
 script:
 - "make"
