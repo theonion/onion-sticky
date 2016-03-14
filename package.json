@@ -6,6 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "babelify": "^6.3.0",
+    "bower": "^1.7.7",
     "browserify": "^11.2.0",
     "chai": "^3.4.1",
     "karma": "^0.13.15",
@@ -16,9 +17,9 @@
     "karma-html2js-preprocessor": "^0.1.0",
     "karma-mocha": "^0.2.1",
     "mocha": "^2.3.4",
+    "onionsay": "theonion/onionsay",
     "phantomjs": "^1.9.19",
-    "watch": "^0.16.0",
-    "onionsay": "theonion/onionsay"
+    "watch": "^0.16.0"
   },
   "scripts": {
     "build": "make",
