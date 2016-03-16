@@ -35,14 +35,21 @@ function debugFrame(sticky, label) {
 }
 
 describe('Onion Sticky', function () {
+  var scrollContainer;
   before(function () {
     fixture.setBase('test');
+    if (document.body.scrollHeight > document.documentElement.scrollHeight) {
+      scrollContainer = document.body;
+    }
+    else {
+      scrollContainer = document.documentElement;
+    }
   });
 
   beforeEach(function() {
-    document.body.scrollTop = 0;
+    scrollContainer.scrollTop = 0;
     this.markup = fixture.load('test.html')[0];
-    document.body.appendChild(this.markup);
+    document.body.insertBefore(this.markup, document.body.firstChild);
 
     this.header = $('header');
     this.footer = $('footer');
@@ -50,14 +57,14 @@ describe('Onion Sticky', function () {
       printDebug: false,
       element: this.element = $('aside'),
       container: this.container = $('main'),
-      scrollContainer: this.scrollContainer = $(document.body),
+      scrollContainer: this.scrollContainer = $(scrollContainer),
       getDistanceFromTop: function () {
         return this.header.outerHeight(true);
       }.bind(this),
       getDistanceFromBottom: function () {
         return this.footer.outerHeight(true);;
       }.bind(this),
-      followScroll: false
+      followScroll: false,
     });
   });
 
@@ -79,9 +86,9 @@ describe('Onion Sticky', function () {
 
     it('true when element is out of viewport (above)', function () {
       this.element.css({
-        position: 'fixed',
-        top: '-101px',
         height: '100px',
+        position: 'fixed',
+        top: -101,
       });
       this.sticky.getFrameData();
 
@@ -90,9 +97,9 @@ describe('Onion Sticky', function () {
 
     it('true when element is out of viewport (below)', function () {
       this.element.css({
+        height: '100px',
         position: 'fixed',
         top: window.innerHeight + 1,
-        height: '100px',
       });
       this.sticky.getFrameData();
 
@@ -109,18 +116,28 @@ describe('Onion Sticky', function () {
     });
 
     it('false when scrolled above zero point', function () {
-      document.body.scrollTop = 200;
+      scrollContainer.scrollTop = 200;
       this.sticky.getFrameData();
 
       assert.isFalse(this.sticky.containerTopBelowZeroPoint());
     });
   });
 
-  describe('containerBottomAboveBottomPoint', function () {
+  describe.only('containerBottomAboveBottomPoint', function () {
     it('true when scrolled above bottom point', function () {
-      document.body.scrollTop = this.container.height() + this.header.height() + 10;
+      scrollContainer.scrollTop = this.container.height() + this.header.height() + 10;
+      console.log('scrollContainer.expectedScrollTop', this.container.height() + this.header.height() + 10)
+      console.log('scrollContainer.actualScrollTop', scrollContainer.scrollTop);
       this.sticky.getFrameData();
 
+      console.log('=========================');
+      debugFrame(this.sticky);
+      debugRect(this.container, 'containerRect');
+      debugRect(this.element, 'elementRect');
+      console.log('body.scrollTop', document.body.scrollTop);
+      console.log('documentElement.scrollTop', document.documentElement.scrollTop);
+
+      console.log('=========================');
       assert.isTrue(this.sticky.containerBottomAboveBottomPoint());
     });
 
@@ -133,7 +150,7 @@ describe('Onion Sticky', function () {
 
   describe('elementBottomAboveBottomPoint', function () {
     it('true when scrolled above bottom point', function () {
-      document.body.scrollTop = this.element.height() + this.header.height() + 10;
+      scrollContainer.scrollTop = this.element.height() + this.header.height() + 10;
       this.sticky.getFrameData();
 
       assert.isTrue(this.sticky.elementBottomAboveBottomPoint());
@@ -155,7 +172,7 @@ describe('Onion Sticky', function () {
 
     it('false when not scrolled beyond zero point', function () {
       this.element.css({ position: 'relative', top: '100px' });
-      document.body.scrollTop = this.header.height();
+      scrollContainer.scrollTop = this.header.height();
       this.sticky.getFrameData();
 
       assert.isFalse(this.sticky.elementTopBelowZeroPoint());
@@ -241,7 +258,6 @@ describe('Onion Sticky', function () {
     it('true when screen width is less than breakpoint', function () {
       this.sticky.breakpoint = window.innerWidth + 100;
 
-      console.log(this.sticky.lessThanBreakpoint);
       assert.isTrue(this.sticky.lessThanBreakpoint());
     });
 
@@ -274,18 +290,18 @@ describe('Onion Sticky', function () {
       this.sticky.containerTopBelowZeroPoint = returnTrue;
       this.sticky.renderFrame();
 
-      assert.equal(this.element.css('position'), 'static');
-      assert.equal(this.element.css('top'), 'auto');
-      assert.equal(this.element.css('bottom'), 'auto');
+      assert.equal(this.element[0].style.position, '');
+      assert.equal(this.element[0].style.top, '');
+      assert.equal(this.element[0].style.bottom, '');
     });
 
     it('sets styles when containerBottomAboveBottomPoint', function () {
       this.sticky.containerBottomAboveBottomPoint = returnTrue;
       this.sticky.renderFrame();
 
-      assert.equal(this.element.css('position'), 'absolute');
-      assert.equal(this.element.css('top'), 'auto');
-      assert.equal(this.element.css('bottom'), '200px');
+      assert.equal(this.element[0].style.position, 'absolute');
+      assert.equal(this.element[0].style.top, '');
+      assert.equal(this.element[0].style.bottom, '200px');
     });
 
     context('when scrolling down', function () {
@@ -299,9 +315,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementBottomAboveBottomPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'fixed');
-        assert.equal(this.element.css('top'), 'auto');
-        assert.equal(this.element.css('bottom'), '200px');
+        assert.equal(this.element[0].style.position, 'fixed');
+        assert.equal(this.element[0].style.top, '');
+        assert.equal(this.element[0].style.bottom, '200px');
       });
 
       it('sets styles when !followSCroll and elementFixedToTop', function () {
@@ -309,9 +325,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementFixedToTop = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'absolute');
-        assert.equal(this.element.css('top'), '410px');
-        assert.equal(this.element.css('bottom'), 'auto');
+        assert.equal(this.element[0].style.position, 'absolute');
+        assert.equal(this.element[0].style.top, '410px');
+        assert.equal(this.element[0].style.bottom, '');
       });
     });
 
@@ -328,9 +344,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementTopBelowZeroPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'fixed');
-        assert.equal(this.element.css('top'), '200px');
-        assert.equal(this.element.css('bottom'), 'auto');
+        assert.equal(this.element[0].style.position, 'fixed');
+        assert.equal(this.element[0].style.top, '200px');
+        assert.equal(this.element[0].style.bottom, '');
       });
 
       it('sets styles if !followScroll and elementFixedToBottom', function () {
@@ -338,9 +354,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementFixedToBottom = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'absolute');
-        assert.equal(this.element.css('top'), '99px');
-        assert.equal(this.element.css('bottom'), 'auto');
+        assert.equal(this.element[0].style.position, 'absolute');
+        assert.equal(this.element[0].style.top, '99px');
+        assert.equal(this.element[0].style.bottom, '');
       });
 
       it('sets styles if elementBottomAboveBottomPoint and followScroll = true', function () {
@@ -348,9 +364,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementBottomAboveBottomPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'fixed');
-        assert.equal(this.element.css('top'), 'auto');
-        assert.equal(this.element.css('bottom'), '200px');
+        assert.equal(this.element[0].style.position, 'fixed');
+        assert.equal(this.element[0].style.top, '');
+        assert.equal(this.element[0].style.bottom, '200px');
       });
     });
 
@@ -365,9 +381,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementTopBelowZeroPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'fixed');
-        assert.equal(this.element.css('top'), '200px');
-        assert.equal(this.element.css('bottom'), 'auto');
+        assert.equal(this.element[0].style.position, 'fixed');
+        assert.equal(this.element[0].style.top, '200px');
+        assert.equal(this.element[0].style.bottom, '');
       });
 
       it('sets styles if !followScroll and elementFixedToBottom', function () {
@@ -375,18 +391,18 @@ describe('Onion Sticky', function () {
         this.sticky.elementFixedToBottom = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'absolute');
-        assert.equal(this.element.css('top'), '10px');
-        assert.equal(this.element.css('bottom'), 'auto');
+        assert.equal(this.element[0].style.position, 'absolute');
+        assert.equal(this.element[0].style.top, '10px');
+        assert.equal(this.element[0].style.bottom, '');
       });
 
       it('sets styles if elementBottomAboveBottomPoint', function () {
         this.sticky.elementBottomAboveBottomPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'fixed');
-        assert.equal(this.element.css('top'), 'auto');
-        assert.equal(this.element.css('bottom'), '200px');
+        assert.equal(this.element[0].style.position, 'fixed');
+        assert.equal(this.element[0].style.top, '');
+        assert.equal(this.element[0].style.bottom, '200px');
       });
     });
   });
@@ -398,9 +414,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementBottomAboveBottomPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'static');
-        assert.equal(this.element.css('top'), 'auto');
-        assert.equal(this.element.css('bottom'), 'auto');
+        assert.equal(this.element[0].style.position, '');
+        assert.equal(this.element[0].style.top, '');
+        assert.equal(this.element[0].style.bottom, '');
       });
     });
 
@@ -422,9 +438,9 @@ describe('Onion Sticky', function () {
         this.sticky.elementBottomAboveBottomPoint = returnTrue;
         this.sticky.renderFrame();
 
-        assert.equal(this.element.css('position'), 'fixed');
-        assert.equal(this.element.css('top'), 'auto');
-        assert.equal(this.element.css('bottom'), '200px');
+        assert.equal(this.element[0].style.position, 'fixed');
+        assert.equal(this.element[0].style.top, '');
+        assert.equal(this.element[0].style.bottom, '200px');
       });
     });
   });

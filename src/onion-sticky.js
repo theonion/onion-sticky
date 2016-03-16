@@ -41,15 +41,17 @@ export class OnionSticky {
     let containerRect = this.container[0].getBoundingClientRect();
 
     this.frame = {
-      elementRect        : pickDimensions(elementRect),
-      containerRect      : pickDimensions(containerRect),
-      innerHeight        : window.innerHeight,
-      innerWidth         : window.innerWidth,
-      containerTop       : containerRect.top,
-      containerBottom    : containerRect.bottom,
-      zeroPoint          : this.getDistanceFromTop(),
-      bottomPoint        : this.getDistanceFromBottom(),
-      scrollDirection    : this.calculateScrollDirection(),
+      elementRect     : pickDimensions(elementRect),
+      containerRect   : pickDimensions(containerRect),
+      innerHeight     : this.getInnerHeight(),
+      innerWidth      : this.getInnerWidth(),
+      containerTop    : containerRect.top,
+      containerBottom : containerRect.bottom,
+      elementTop      : elementRect.top,
+      elementBottom   : elementRect.bottom,
+      zeroPoint       : this.getDistanceFromTop(),
+      bottomPoint     : this.getDistanceFromBottom(),
+      scrollDirection : this.calculateScrollDirection(),
     }
   }
 
@@ -59,25 +61,37 @@ export class OnionSticky {
     }
   }
 
+  getInnerHeight () {
+    return window.innerHeight;
+  }
+
+  getInnerWidth () {
+    return window.innerWidth;
+  }
+
   elementOutOfViewport () {
     let elementRect = this.frame.elementRect;
-    return elementRect.top > window.innerHeight || elementRect.bottom < 0;
+    return elementRect.top > this.getInnerHeight() || elementRect.bottom < 0;
   }
 
   containerTopBelowZeroPoint () {
-    return this.frame.containerRect.top > this.frame.zeroPoint;
+    return this.frame.containerTop > this.frame.zeroPoint;
   }
 
   containerBottomAboveBottomPoint () {
-    return this.frame.containerRect.bottom <= this.frame.innerHeight - this.frame.bottomPoint;
+    console.log(
+      `this.frame.containerBottom=${this.frame.containerBottom} <= this.frame.innerHeight - this.frame.bottomPoint (${this.frame.innerHeight - this.frame.bottomPoint})`,
+      this.frame.containerBottom <= this.frame.innerHeight - this.frame.bottomPoint
+    );
+    return this.frame.containerBottom <= this.frame.innerHeight - this.frame.bottomPoint;
   }
 
   elementBottomAboveBottomPoint () {
-    return this.frame.elementRect.bottom < this.frame.innerHeight - this.frame.bottomPoint;
+    return this.frame.elementBottom < this.frame.innerHeight - this.frame.bottomPoint;
   }
 
   elementTopBelowZeroPoint () {
-    return this.frame.elementRect.top >= this.frame.zeroPoint;
+    return this.frame.elementTop >= this.frame.zeroPoint;
   }
 
   elementFixedToTop () {
@@ -157,7 +171,7 @@ export class OnionSticky {
       else if (!this.followScroll && this.elementFixedToTop()) {
         this.debug('elementFixedToTop');
         styles.position = 'absolute';
-        styles.top = (Math.abs(this.frame.containerRect.top) - Math.abs(this.frame.elementRect.top)) + this.frame.zeroPoint + this.frame.zeroPoint;
+        styles.top = (Math.abs(this.frame.containerTop) - Math.abs(this.frame.elementTop)) + this.frame.zeroPoint + this.frame.zeroPoint;
         styles.bottom = '';
       }
     }
@@ -171,7 +185,7 @@ export class OnionSticky {
       else if (!this.followScroll && this.elementFixedToBottom()) {
         this.debug('fix to absolute top');
         styles.position = 'absolute';
-        styles.top = Math.abs(this.frame.containerRect.top) - Math.abs(this.frame.elementRect.top);
+        styles.top = Math.abs(this.frame.containerTop) - Math.abs(this.frame.elementTop);
         styles.bottom = '';
       } else if (this.elementBottomAboveBottomPoint()) {
         this.debug('elementBottomAboveBottomPoint');
