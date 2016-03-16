@@ -123,7 +123,7 @@ describe('Onion Sticky', function () {
     });
   });
 
-  describe.only('containerBottomAboveBottomPoint', function () {
+  describe('containerBottomAboveBottomPoint', function () {
     it('true when scrolled above bottom point', function () {
       scrollContainer.scrollTop = this.container.height() + this.header.height() + 10;
       console.log('scrollContainer.expectedScrollTop', this.container.height() + this.header.height() + 10)
