@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- '5'
+- '5.1'
+sudo: false
+before_script:
+- npm install -g npm@'>1.4.3'
+- "./node_modules/.bin/bower install"
+script:
+- make
+cache:
+  directories:
+  - node_modules
+  - app/bower_components
+env:
+  global:
+    secure: P+VEvVdwV03LrY4sAKLFE1qCNUvVXrLWeE38c5AZ5YQSGUXSEsimxDOJ0XRy5WBliYnd8yLfjEjPcKG/Q1T11oGzE+MSCcNqOmLJf6tKOVpLLfhe/oeWjclx7YPgfpKuvw1E4FdTJ8D3z5GV0YwTfjJdxA2JTmnJDI1ON1sgDEwhN7PEeC8bcB3vzraAhLLViarTi957sW0UXJIF2elyxf9f2S5l1ez59Ir28YUsgXOvVNoi/8hd4Ax5YH04+zv6lZSa6c1cKDoBJJbqOJLdigL4B1yglZXunUnOLmX7NsC8LDnmWKLoJ3jhmFVG9q7QNSHoer2B5K3Zdm6BZvSUUxrS8ckPFtM8475Le2SV6T4DaYLoJkBXH+Zc9zAbszwtXB74vzGhww2uJ41OfsDmtLjgoFUo2O/GCwhfqLqDAOo0IXQ4UwxRmckDGRXqZUYxCUIF5PL9eEXscictOQ1jOOsKoAJzZ9EQeT7Zrsp2vEexQfxvxtnvYKZ34f7Nsuy90pwTj3d6Oh+zqGkUMZDx6ncVf7Tb/PQGbaTmhWgubkMZWn9n40hQ9AFUvBu9EUXK+23mzYxyJFBuMjyFv+p6QuwYuzLb8EclQ50Rvh+RWfxGUqPac4bG9Yh+E8yzHeehh8K6ZwZZNXz8mH9L2ZM0VB3+x0TO34LqczNKZQEOEX0=

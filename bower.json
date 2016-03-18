@@ -6,7 +6,7 @@
     "Onion Product Team <webtech@theonion.com>"
   ],
   "description": "A sticky sidebar implementation for onion properties.",
-  "main": "onion-sticky.js",
+  "main": "dist/onion-sticky.browserify-shim.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
