@@ -1,9 +1,8 @@
-all: clean debug shim copy test
-FORCE: # Depend on force to force a task to run always
-test: FORCE
-	node_modules/.bin/karma start karma.conf.js --single-run
+develop: clean debug shim copy
+test:
+	node_modules/.bin/karma start karma.conf.js
 watch:
-	node_modules/.bin/watch --wait 1 "clear; make all" ./src ./test
+	node_modules/.bin/watch --wait 1 "scripts/develop" ./src ./test
 debug:
 	scripts/build --debug
 shim:

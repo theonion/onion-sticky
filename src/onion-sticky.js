@@ -22,8 +22,34 @@ function pickDimensions (rect) {
   return dimensions;
 }
 
+function requireValues (message, givenValues, requiredValues) {
+  let  missingValues = [];
+  requiredValues.forEach(function (option) {
+    let value = givenValues[option];
+    if (value === undefined || value === null) {
+      missingValues.push(option);
+    }
+  });
+
+  if (missingValues.length > 1) {
+    console.warn(
+      message,
+      '\nvalues given:', givenValues,
+      '\nvalues missing:', missingValues,
+    );
+  }
+};
+
 export class OnionSticky {
   constructor (options) {
+    requireValues('Missing options for OnionSticky constructor', options, [
+      'element',
+      'container',
+      'scrollContainer',
+      'getDistanceFromTop',
+      'getDistanceFromBottom',
+    ]);
+
     _.extend(this, options);
     this.animationLoop = this.animationLoop.bind(this);
   }
@@ -79,10 +105,6 @@ export class OnionSticky {
   }
 
   containerBottomAboveBottomPoint () {
-    console.log(
-      `this.frame.containerBottom=${this.frame.containerBottom} <= this.frame.innerHeight - this.frame.bottomPoint (${this.frame.innerHeight - this.frame.bottomPoint})`,
-      this.frame.containerBottom <= this.frame.innerHeight - this.frame.bottomPoint
-    );
     return this.frame.containerBottom <= this.frame.innerHeight - this.frame.bottomPoint;
   }
 
@@ -139,6 +161,8 @@ export class OnionSticky {
     if (!this.shouldRenderAnimation()) {
       return;
     }
+    
+    this.debug(this.frame);
 
     let styles = {};
 
